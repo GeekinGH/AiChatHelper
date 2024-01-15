@@ -34,7 +34,7 @@
 以下操作都是在“微信助手”ChatGPT中操作：
 1. 将你的代理地址填写到“代理地址”栏。
 2. 如果使用的是ChatGPT API，请和 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的gpt-4或者gpt-3.5-turbo。
-3. 如果使用的是Gemini-pro API，请和 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini 或者 Gemini-pro！
+3. 如果使用的是Gemini-pro API，请和 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini 或者 Gemini-pro 。
 
 ## 其他注意事项
 - 代码修改自懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
