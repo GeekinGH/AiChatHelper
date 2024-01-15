@@ -191,7 +191,7 @@ async function processGeminiRequest(contents, res) {
     }
 }
 
-/ 保持活动路由处理程序
+// 保持活动路由处理程序
 app.get('/keep-alive', (req, res) => {
   // 执行命令以保持会话活动
   exec('echo "保持活动"', (error, stdout, stderr) => {
