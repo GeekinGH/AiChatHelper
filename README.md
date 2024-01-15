@@ -39,6 +39,6 @@
 ## 其他注意事项
 - 代码修改自懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
 - 如果遇到任何问题，请参考[Replit 文档](https://docs.replit.com)进行故障排除。
-- 有关 ChatGPT 相关配置，请查看你的仓库中的 app.js 文件。
+- 有关 ChatGPT 相关配置，请查看你的仓库中的 README.md 文件。
 
 祝你在微信助手中体验愉快！
