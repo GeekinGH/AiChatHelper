@@ -36,6 +36,12 @@
 2. 如果使用的是ChatGPT API，请和 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的gpt-4或者gpt-3.5-turbo。
 3. 如果使用的是Gemini-pro API，请和 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini 或者 Gemini-pro 。
 
+## 防止Repl不定时休眠的最终方案
+如果本代码的保活功能正常运行，反代能持续服务，忽略以下所述方法！
+如果发现本代码中的保活功能失效,Replit在没有请求时依然会不定期的休眠，最有效的解决方案是用UptimeRobot网站监控功能，方法很简单：
+1、在[UptimeRobot](https://uptimerobot.com/) 选择免费计划(free),注册一个账号,免费的足够用了。
+2、新建一个监视，URL填写你的Repl反代网址，间隔5分钟，超时30秒。这样让它定期发送head请求，是防止Repl休眠的一个好方法。
+
 ## 其他注意事项
 - 代码修改自懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
 - 如果遇到任何问题，请参考[Replit 文档](https://docs.replit.com)进行故障排除。
