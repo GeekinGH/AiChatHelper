@@ -1,6 +1,5 @@
 // 导入所需的模块
 const express = require('express');
-const { exec } = require('child_process');
 const axios = require('axios');
 
 // 创建 Express 应用
@@ -191,33 +190,38 @@ async function processGeminiRequest(contents, res) {
     }
 }
 
-// 保持活动路由处理程序
-app.get('/keep-alive', (req, res) => {
-  // 执行命令以保持会话活动
-  exec('echo "保持活动"', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`保持活动错误: ${error.message}`);
-      res.status(500).send('内部服务器错误');
-      return;
-    }
-    console.log(`保持活动响应: ${stdout}`);
-    res.send('保持活动成功');
-  });
-});
-
-// 设置定时器，每隔5分钟执行一次保持活动操作
-setInterval(() => {
-  // 直接调用保持活动处理程序
-  axios.get('http://localhost:3000/keep-alive')
-    .then(response => {
-      console.log('保持活动内部请求:', response.data);
-    })
-    .catch(error => {
-      console.error('保持活动内部请求错误:', error.message);
-    });
-}, 5 * 60 * 1000);
-
 // 启动 Express 应用
 app.listen(port, () => {
     console.log(`服务启动成功 http://localhost:${port}`);
 });
+
+const beijingTime = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+
+// 定义保活函数
+async function keepAlive() {
+  const intervalMinutes = 5; //间隔分钟，5 则表示间隔 5 分钟进行一次保活；目前测试 5 分钟保活是比较有效果的，你们可以自测其他间隔时间。
+  const intervalMilliseconds = intervalMinutes * 60 * 1000; //间隔毫秒，不要修改
+    
+  while (true) {
+    try {
+      // 使用 axios 发送请求到保活路由
+      const response = await axios.get('http://localhost:3000/keep-alive', {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+        }
+      });
+
+      if (response.status === 200) {
+        console.log(`${beijingTime} Keeping online ...`);
+      }
+    } catch (error) {
+      console.error(`Keep Alive Request Error: ${error.message}`);
+    }
+
+    // 间隔 intervalMinutes 分钟
+    await new Promise(resolve => setTimeout(resolve, intervalMilliseconds));
+  }
+}
+
+// 启动保活函数
+keepAlive();
