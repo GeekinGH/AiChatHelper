@@ -195,7 +195,10 @@ app.listen(port, () => {
     console.log(`服务启动成功 http://localhost:${port}`);
 });
 
-const beijingTime = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+// 定义获取北京时间的函数
+function getBeijingTime() {
+  return new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+}
 
 // 定义保活函数
 async function keepAlive() {
@@ -212,7 +215,7 @@ async function keepAlive() {
       });
 
       if (response.status === 200) {
-        console.log(`${beijingTime} Keeping online ...`);
+        console.log(`${getBeijingTime()} Keeping online ...`);
       }
     } catch (error) {
       console.error(`Keep Alive Request Error: ${error.message}`);
