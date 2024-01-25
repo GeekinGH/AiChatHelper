@@ -4,8 +4,8 @@ function isWxidAllowed(wxid) {
     return allowedWxids.includes(wxid);
 }
 
-// 全局范围定义 respondWithError 函数
-function respondWithError(messages) {
+// 全局范围定义 respondJsonMessage 函数
+function respondJsonMessage(messages) {
     const errorResponse = {
         choices: [{
                 message: {
@@ -34,7 +34,7 @@ async function handleRequest(request) {
 
     // 判断 wxid 是否在允许的数组中
     if (!isWxidAllowed(wxid)) {
-        return respondWithError('我是狗，偷接口，偷了接口当小丑～');
+        return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
     }
 
     const requestBody = await request.json();
@@ -48,8 +48,11 @@ async function handleRequest(request) {
         apiKey = apiKey.slice(7);
         const formattedMessages = formatMessagesForGemini(messages);
         return processGeminiRequest(formattedMessages, apiKey);
+    } else if (chatModel === 'qwen-turbo') {
+        apiKey = apiKey.slice(7);
+        return handleQwenRequest(requestBody, chatModel, apiKey);
     } else {
-        return respondWithError('不支持的 chat_model 类型');
+        return respondJsonMessage('不支持的 chat_model 类型');
     }
 }
 
@@ -69,20 +72,20 @@ async function handleChatGPTRequest(requestBody, chatModel, apiKey) {
                 'messages': requestBody.messages,
             }),
         });
-
         const responseData = await response.json();
 
         // 判断是否有错误信息
         if (responseData.error) {
             // 处理错误逻辑
             const errorMessage = responseData.error.message || '未知错误';
-            return respondWithError(`ChatGPT请求出错: ${errorMessage}`);
+            return respondJsonMessage(`ChatGPT请求出错: ${errorMessage}`);
         }
 
         // 如果没有错误，返回 ChatGPT API 的响应
         return new Response(JSON.stringify(responseData));
+
     } catch (error) {
-        return respondWithError(`ChatGPT请求出错: ${error.toString()}`);
+        return respondJsonMessage(`ChatGPT请求出错: ${error.toString()}`);
     }
 }
 
@@ -150,21 +153,47 @@ async function processGeminiRequest(contents, apiKey) {
 
         const responseData = await response.json();
         if (responseData.candidates) {
-            return new Response(JSON.stringify({
-                    'choices': [{
-                            'message': {
-                                'role': 'assistant',
-                                'content': responseData.candidates[0].content.parts[0].text,
-                            },
-                        }
-                    ],
-                }));
+            return respondJsonMessage(responseData.candidates[0].content.parts[0].text);
         } else {
             // 处理失败逻辑，查看是否有错误消息字段
             const errorMessage = responseData.error ? responseData.error.message : '未知错误';
-            return respondWithError(`Gemini 请求出错: ${errorMessage}`);
+            return respondJsonMessage(`Gemini 请求出错: ${errorMessage}`);
         }
     } catch (error) {
-        return respondWithError(`Gemini请求出错: ${error.toString()}`);
+        return respondJsonMessage(`Gemini请求出错: ${error.toString()}`);
+    }
+}
+
+async function handleQwenRequest(requestBody, chatModel, apiKey) {
+
+    const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': apiKey,
+            },
+            body: JSON.stringify({
+                'model': chatModel,
+                'input': {
+                    'messages': requestBody.messages,
+                },
+            }),
+        });
+        const responseData = await response.json();
+
+        // 判断是否有错误信息
+        if (responseData.code) {
+            // 处理错误逻辑
+            const errorMessage = responseData.message || '未知错误';
+            return respondJsonMessage(`Qwen请求出错: ${errorMessage}`);
+        }
+
+        // 如果没有错误，返回 ChatGPT API 的响应
+        return respondJsonMessage(responseData.output.text);
+    } catch (error) {
+        return respondJsonMessage(`Qwen请求出错: ${error.toString()}`);
     }
 }
