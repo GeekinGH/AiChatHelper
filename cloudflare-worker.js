@@ -1,3 +1,6 @@
+//全局范围定义gemini的反向代理，解决“User location is not supported for the API use”问题
+const proxyUrl = '';//请先部署此反向代理https://github.com/antergone/palm-netlify-proxy，填写反代域名，类似：https://xxx.netlify.app，需要填"https://"
+
 // 全局范围定义微信 ID 鉴权函数
 function isWxidAllowed(wxid) {
     const allowedWxids = ['wxid1', 'wxid2', 'wxid3']; // 替换成实际的 wxid 列表
@@ -5,8 +8,8 @@ function isWxidAllowed(wxid) {
 }
 
 // 全局范围定义 respondJsonMessage 函数
-function respondJsonMessage(messages) {
-    const errorResponse = {
+function respondJsonMessage(message) {
+    const jsonMessage = {
         choices: [{
                 message: {
                     role: 'assistant',
@@ -16,7 +19,7 @@ function respondJsonMessage(messages) {
         ],
     };
 
-    return new Response(JSON.stringify(errorResponse), {
+    return new Response(JSON.stringify(jsonMessage), {
         headers: {
             'Content-Type': 'application/json; charset=utf-8',
         },
@@ -47,7 +50,7 @@ async function handleRequest(request) {
     } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
         apiKey = apiKey.slice(7);
         const formattedMessages = formatMessagesForGemini(messages);
-        return processGeminiRequest(formattedMessages, apiKey);
+        return handleGeminiRequest(formattedMessages, apiKey);
     } else if (chatModel === 'qwen-turbo') {
         apiKey = apiKey.slice(7);
         return handleQwenRequest(requestBody, chatModel, apiKey);
@@ -123,10 +126,14 @@ function formatMessagesForGemini(messages) {
     return formattedMessages;
 }
 
-async function processGeminiRequest(contents, apiKey) {
+async function handleGeminiRequest(contents, apiKey) {
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-
+        let url;
+        if (proxyUrl !== '') {
+          url = `${proxyUrl}/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+        } else {
+          url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+        }
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -191,7 +198,7 @@ async function handleQwenRequest(requestBody, chatModel, apiKey) {
             return respondJsonMessage(`Qwen请求出错: ${errorMessage}`);
         }
 
-        // 如果没有错误，返回 ChatGPT API 的响应
+        // 如果没有错误，返回 Qwen API 的响应
         return respondJsonMessage(responseData.output.text);
     } catch (error) {
         return respondJsonMessage(`Qwen请求出错: ${error.toString()}`);
