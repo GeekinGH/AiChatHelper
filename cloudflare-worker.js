@@ -13,7 +13,7 @@ function respondJsonMessage(message) {
         choices: [{
                 message: {
                     role: 'assistant',
-                    content: messages,
+                    content: message,
                 },
             }
         ],
