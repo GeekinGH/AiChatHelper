@@ -3,8 +3,6 @@ import { Context } from "@netlify/edge-functions";
 // 从 Netlify 的环境变量中获取反向代理地址
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
-//const proxyUrl = process.env.PROXY_URL;
-
 // 全局范围定义 respondJsonMessage 函数
 function respondJsonMessage(message) {
     const jsonMessage = {
