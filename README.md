@@ -3,6 +3,10 @@
 
 欢迎来到微信助手 ChatGPT 反向代理项目！这个仓库帮助你在 Cloudflare Workers 上部署 ChatGPT / Gemini-pro / 通义千问 反向代理，使其能够与懒猫的微信助手插件的 ChatGPT 功能协同工作。
 
+### Deploy With Netlify
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/geekingh/aichathelper)
+
 # 此方案，已经完美解决 Gemini “User location is not supported for the API use”的问题，请按照以下步骤完美解决它：
 1. 前往 [palm-netlify-proxy](https://github.com/antergone/palm-netlify-proxy) 仓库，点击 "Deploy With Netlify" 按钮。
 2. 部署完成后，您将获得由Netlify分配的域名（例如，https://xxx.netlify.app）。
