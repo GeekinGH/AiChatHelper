@@ -1,5 +1,5 @@
 [build]
   functions = "netlify/functions"
 
- [plugins]
-   package = "@netlify/plugin-functions-serviceworker"
+[[plugins]]
+  package = "netlify-plugin-functions"
