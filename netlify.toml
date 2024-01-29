@@ -1,5 +1,9 @@
 [build]
-  functions = "netlify/functions"
+  publish = "/opt/build/repo"
+  publishOrigin = "ui"
+  functions = "/opt/build/repo/netlify/functions"
 
 [[plugins]]
   package = "@netlify/plugin-functions-serviceworker"
+  origin = "config"
+  inputs = {}
