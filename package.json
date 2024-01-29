@@ -1,0 +1,15 @@
+{
+  "name": "AiChatHelper_netlify",
+  "version": "1.0.0",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "netlify": {
+    "plugins": [
+      "@netlify/plugin-functions-serviceworker"
+    ]
+  }
+}
