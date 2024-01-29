@@ -14,7 +14,7 @@
 ## 部署到 Netlify
 
 1. 注册[Netlify 帐号](https://www.netlify.com/)。
-2. 在 [Replit](https://app.netlify.com) 上创建一个新Site(Add new site)。
+2. 在 [Netlify](https://app.netlify.com) 上创建一个新Site(Add new site)。
 3. 点击弹出的窗口 "Import an existing project" 。
 4. Deploy with GitHub.
 5. 按提示授权 GitHub 到你的 Netlify。
