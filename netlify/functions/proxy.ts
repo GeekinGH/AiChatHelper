@@ -3,7 +3,7 @@ import { Context } from "@netlify/edge-functions";
 // 从 Netlify 的环境变量中获取反向代理地址
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
-const proxyUrl = process.env.PROXY_URL;
+//const proxyUrl = process.env.PROXY_URL;
 
 // 全局范围定义 respondJsonMessage 函数
 function respondJsonMessage(message) {
@@ -25,21 +25,24 @@ function respondJsonMessage(message) {
 
 
 
-export default async (req: Request, context: Context) => {
+export default async (request: Request, context: Context) => {
 	try{
-		const wxid = req.headers.get("wxid");
-		const chatAuthorization = req.headers.get("authorization");
-		const apiKey = chatAuthorization.replace('Bearer ', '');
-		const requestBody = req.body;
-		const chatModel = requestBody.model.trim().toLowerCase();
+		const wxid = request.headers.get("wxid");
+		if (!wxid) {
+	            throw new Error('未提供 wxid 头部信息');
+	        }
+		const chatAuthorization = request.headers.get("authorization");
+		const apiKey = chatAuthorization ? chatAuthorization.replace('Bearer ', '') : '';
+		const requestBody = await request.json();
+		const chatModel= requestBody.model.toLowerCase().trim();
 		const countryName = context.geo?.country?.name || "somewhere in the world";
 		
-		// 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
+	// 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
         if (wxidArray.length > 0 && !wxidArray.includes(wxid)) {
             return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
         }
 		
-		if (chatModel === 'gpt-3.5-turbo' || chatModel === 'gpt-4') {
+	if (chatModel === 'gpt-3.5-turbo' || chatModel === 'gpt-4') {
             return handleChatGPTRequest(requestBody, chatModel, ChatGptApiKey);
         } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
             return handleGeminiRequest(requestBody, chatModel, apiKey);
@@ -123,15 +126,10 @@ function formatMessagesForGemini(messages) {
 
 async function handleGeminiRequest(requestBody, chatModel, apiKey) {
     try {
-        let url;
-        if (proxyUrl !== '') {
-          url = `${proxyUrl}/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-        } else {
-          url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-        }
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 		
-		const chatMessages = requestBody.messages;
-		const contents = formatMessagesForGemini(chatMessages);
+	const chatMessages = requestBody.messages;
+	const contents = formatMessagesForGemini(chatMessages);
 		
         const response = await fetch(url, {
             method: 'POST',
