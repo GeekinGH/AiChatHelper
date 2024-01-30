@@ -29,7 +29,7 @@ only for 微信助手，突破gemini对区域的限制
 1. 将你的代理地址填写到“代理地址”栏。
 2. 如果使用的是ChatGPT API，请和 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的gpt-4或者gpt-3.5-turbo。
 3. 如果使用的是Gemini-pro API，请和 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini或Gemini-pro 。
-4. 如果使用的是通义千问 API，请和 “APIKey”中填写Qwen的API Key，在“模型”中选择对应的qwen-turbo或qwen-max。
+4. 如果使用的是通义千问 API，请和 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：qwen-turbo或qwen-max。
 
 ## 其他注意事项
 - 部分代码参考了懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
