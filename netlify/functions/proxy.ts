@@ -91,7 +91,7 @@ export default async(request: Request, context: Context) => {
             return handleChatGPTRequest(requestBody, chatModel, chatAuthorization);
         } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
             return handleGeminiRequest(requestBody, chatModel, apiKey);
-        } else if (chatModel === 'qwen-turbo') {
+        } else if (chatModel === 'qwen-turbo' || chatModel === 'qwen-max') {
             return handleQwenRequest(requestBody, chatModel, apiKey);
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
