@@ -13,13 +13,13 @@ only for 微信助手，突破gemini对区域的限制
 
 ## 部署到 Netlify
 
-1. 注册[Netlify 帐号](https://www.netlify.com/)。
+1. 注册[Netlify 帐号](https://www.netlify.com/)。注意：netlify.com和netlify.app都必须设置为直连不可用魔法。
 2. 在 [Netlify](https://app.netlify.com) 上创建一个新Site(Add new site)。
 3. 点击弹出的窗口 "Import an existing project" 。
 4. Deploy with GitHub.
 5. 按提示授权 GitHub 到你的 Netlify。
 6. 选择你刚刚fork的项目
-7. Add environment variables 创建 WXID_ARRAY 这个环境变量（只创建一个别重复），values值为 wxid1,wxid2,wxid3 （替换为你需要授权的微信ID，不同的ID需要用英文逗号隔开,最后一个微信ID后面不要加逗号。如替换wxid1，记得完全替换别留下wxid开头，替换为你们自己的微信ID。比如 lamboa,lumak)
+7. Add environment variables 创建 WXID_ARRAY 这个环境变量（只创建一个别重复），values值为 wxid1,wxid2,wxid3 （替换为你需要授权的微信ID，不同的ID需要用英文逗号隔开,最后一个微信ID后面不要加逗号。如替换wxid1，记得完全替换别留下wxid开头，替换为你们自己的微信ID，以此类推。比如 lambous,lumauk)
 8. Deploy AiChatHelper
 9. 等待部署完成，你将获得一个二级域名，这就是你的代理地址，记住他（xxx.netlify.app；xxx可自定义，需要带上前缀https&#58;&#47;&#47;）
 10. 以后在GitHub修改你的代码，Netlity会自动更新代码并重新部署。
