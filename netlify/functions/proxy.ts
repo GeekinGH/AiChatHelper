@@ -1,6 +1,6 @@
 import { Context } from "@netlify/edge-functions";
 
-// 从 Netlify 的环境变量中获取反向代理地址
+// 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
 // 全局范围定义 respondJsonMessage 函数
