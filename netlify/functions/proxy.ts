@@ -1,5 +1,3 @@
-//代码主要参考于懒猫共享的Gemini代理程序，本项目必须配合他的微信助手插件使用
-
 import { Context } from "@netlify/edge-functions";
 
 // 从 Netlify 的环境变量中获取反向代理地址
@@ -24,54 +22,8 @@ function respondJsonMessage(message) {
     });
 }
 
-//此节代码来自于https://github.com/antergone/palm-netlify-proxy
-const CORS_HEADERS: Record < string, string >  = {
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "*",
-    "access-control-allow-headers": "*",
-};
-
 export default async(request: Request, context: Context) => {
     try {
-        //此节代码来自于https://github.com/antergone/palm-netlify-proxy
-        if (request.method === "OPTIONS") {
-            return new Response(null, {
-                headers: CORS_HEADERS,
-            });
-        }
-
-        //此节代码参照https://github.com/antergone/palm-netlify-proxy修改
-        const {
-            pathname,
-            searchParams
-        } = new URL(request.url);
-        if (pathname === "/") {
-            let blank_html = `
-		<!DOCTYPE html>
-		<html>
-		<head>
-		  <meta charset="UTF-8">
-		  <title>Language Model API reverse proxy for WeChat Assistant (Miyou) on Netlify Edge</title>
-		</head>
-		<body>
-		  <h1 id="wechat-miyou-api-proxy-on-netlify-edge">Language Model API reverse proxy for WeChat Assistant (Miyou) on Netlify Edge</h1>
-		  <p>Tips: This project can serve as a proxy for multiple large language models, currently supporting ChatGPT, Google PaLM Gemini-pro, and Aliyun Qianwen. </p>
-		  <ol>
-		  <li>When you see the error message &quot;User location is not supported for the API use&quot; when calling the Google PaLM API</li>
-		  <li>This project resolves the 'User location is not supported for the API use' issue in Google PaLM.</li>
-		  </ol>
-		  <p>For technical discussions, please visit <a href="https://github.com/GeekinGH/AiChatHelper/issues">https://github.com/GeekinGH/AiChatHelper</a></p>
-		</body>
-		</html>
-	    `
-                return new Response(blank_html, {
-                    headers: {
-                        ...CORS_HEADERS,
-                        "content-type": "text/html"
-                    },
-                });
-        }
-
         const wxid = request.headers.get("wxid");
         if (!wxid) {
             throw new Error('未提供 wxid 头部信息');
@@ -92,7 +44,7 @@ export default async(request: Request, context: Context) => {
         } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
             return handleGeminiRequest(requestBody, chatModel, apiKey);
         } else if (chatModel === 'qwen-turbo' || chatModel === 'qwen-max') {
-            return handleQwenRequest(requestBody, chatModel, apiKey);
+            return handleQwenRequest(requestBody, chatModel, chatAuthorization);
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
@@ -164,8 +116,8 @@ function formatMessagesForGemini(messages) {
 }
 
 async function handleGeminiRequest(requestBody, chatModel, apiKey) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
         const chatMessages = requestBody.messages;
         const contents = formatMessagesForGemini(chatMessages);
         const response = await fetch(url, {
@@ -208,6 +160,8 @@ async function handleGeminiRequest(requestBody, chatModel, apiKey) {
 async function handleQwenRequest(requestBody, chatModel, apiKey) {
     const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
     try {
+        const chatMessages = requestBody.messages;
+        const contents = formatMessagesForQwen(chatMessages);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -217,22 +171,47 @@ async function handleQwenRequest(requestBody, chatModel, apiKey) {
             body: JSON.stringify({
                 'model': chatModel,
                 'input': {
-                    'messages': requestBody.messages,
+                    'messages': contents,
                 },
+                'parameters': {},
             }),
         });
         const responseData = await response.json();
-
         // 判断是否有错误信息
         if (responseData.code) {
             // 处理错误逻辑
+            const errorCode = responseData.code;
             const errorMessage = responseData.message || '未知错误';
-            return respondJsonMessage(`${chatModel}: ${errorMessage}`);
+            return respondJsonMessage(`${chatModel}: ${errorCode} - ${errorMessage}`);
         }
 
         // 如果没有错误，返回 Qwen API 的响应
         return respondJsonMessage(responseData.output.text);
     } catch (error) {
-        return respondJsonMessage(`${chatModel}: ${error.toString()}`);
+        return respondJsonMessage(`捕获错误${chatModel}: ${error.toString()}`);
     }
+}
+
+function formatMessagesForQwen(messages) {
+    let formattedMessages = [];
+    messages.forEach((item, index) => {
+        if (index === 0 && item.role === 'system') {
+            let itemContent = item.content.trim();
+            if(itemContent ==""){
+                itemContent = '你是通义千问';
+            }
+            formattedMessages.push({
+                'role': 'system',
+                'content': itemContent,
+            });
+        } else if (index === 1 && item.role === 'assistant') {
+            // 忽略掉第二条消息
+        } else {
+            formattedMessages.push({
+                'role': (item.role === 'assistant') ? 'assistant' : 'user',
+                'content': item.content,
+            });
+        }
+    });
+    return formattedMessages;
 }
