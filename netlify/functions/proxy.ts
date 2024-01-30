@@ -41,17 +41,16 @@ export default async (request: Request, context: Context) => {
         }
 		
 	if (chatModel === 'gpt-3.5-turbo' || chatModel === 'gpt-4') {
-            return handleChatGPTRequest(requestBody, chatModel, ChatGptApiKey);
+            return handleChatGPTRequest(requestBody, chatModel, chatAuthorization);
         } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
             return handleGeminiRequest(requestBody, chatModel, apiKey);
         } else if (chatModel === 'qwen-turbo') {
             return handleQwenRequest(requestBody, chatModel, apiKey);
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
-        }
-		
+        }		
 	}catch (error) {
-        return respondJsonMessage(`处理请求时出错: ${error.toString()}`);
+        return respondJsonMessage(`出错了: ${error.toString()}`);
     }	
 }
 
@@ -77,14 +76,14 @@ async function handleChatGPTRequest(requestBody, chatModel, apiKey) {
         if (responseData.error) {
             // 处理错误逻辑
             const errorMessage = responseData.error.message || '未知错误';
-            return respondJsonMessage(`ChatGPT请求出错: ${errorMessage}`);
+            return respondJsonMessage(`${chatModel}: ${errorMessage}`);
         }
 
         // 如果没有错误，返回 ChatGPT API 的响应
         return new Response(JSON.stringify(responseData));
 
     } catch (error) {
-        return respondJsonMessage(`ChatGPT请求出错: ${error.toString()}`);
+        return respondJsonMessage(`${chatModel}: ${error.toString()}`);
     }
 }
 
@@ -159,10 +158,10 @@ async function handleGeminiRequest(requestBody, chatModel, apiKey) {
         } else {
             // 处理失败逻辑，查看是否有错误消息字段
             const errorMessage = responseData.error ? responseData.error.message : '未知错误';
-            return respondJsonMessage(`Gemini 请求出错: ${errorMessage}`);
+            return respondJsonMessage(`${chatModel} : ${errorMessage}`);
         }
     } catch (error) {
-        return respondJsonMessage(`Gemini请求出错: ${error.toString()}`);
+        return respondJsonMessage(`${chatModel}: ${error.toString()}`);
     }
 }
 
@@ -190,12 +189,12 @@ async function handleQwenRequest(requestBody, chatModel, apiKey) {
         if (responseData.code) {
             // 处理错误逻辑
             const errorMessage = responseData.message || '未知错误';
-            return respondJsonMessage(`Qwen请求出错: ${errorMessage}`);
+            return respondJsonMessage(`${chatModel}: ${errorMessage}`);
         }
 
         // 如果没有错误，返回 Qwen API 的响应
         return respondJsonMessage(responseData.output.text);
     } catch (error) {
-        return respondJsonMessage(`Qwen请求出错: ${error.toString()}`);
+        return respondJsonMessage(`${chatModel}: ${error.toString()}`);
     }
 }
