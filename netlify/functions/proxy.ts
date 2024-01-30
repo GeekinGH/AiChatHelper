@@ -1,3 +1,5 @@
+//代码主要参考于懒猫共享的Gemini代理程序，本项目必须配合他的微信助手插件使用
+
 import { Context } from "@netlify/edge-functions";
 
 // 从 Netlify 的环境变量中获取反向代理地址
@@ -7,11 +9,12 @@ const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [
 function respondJsonMessage(message) {
     const jsonMessage = {
         choices: [{
-            message: {
-                role: 'assistant',
-                content: message,
-            },
-        }],
+                message: {
+                    role: 'assistant',
+                    content: message,
+                },
+            }
+        ],
     };
 
     return new Response(JSON.stringify(jsonMessage), {
@@ -21,26 +24,70 @@ function respondJsonMessage(message) {
     });
 }
 
+//此节代码来自于https://github.com/antergone/palm-netlify-proxy
+const CORS_HEADERS: Record < string, string >  = {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "*",
+    "access-control-allow-headers": "*",
+};
 
+export default async(request: Request, context: Context) => {
+    try {
+        //此节代码来自于https://github.com/antergone/palm-netlify-proxy
+        if (request.method === "OPTIONS") {
+            return new Response(null, {
+                headers: CORS_HEADERS,
+            });
+        }
 
-export default async (request: Request, context: Context) => {
-	try{
-		const wxid = request.headers.get("wxid");
-		if (!wxid) {
-	            throw new Error('未提供 wxid 头部信息');
-	        }
-		const chatAuthorization = request.headers.get("authorization");
-		const apiKey = chatAuthorization ? chatAuthorization.replace('Bearer ', '') : '';
-		const requestBody = await request.json();
-		const chatModel= requestBody.model.toLowerCase().trim();
-		const countryName = context.geo?.country?.name || "somewhere in the world";
-		
-	// 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
+        //此节代码参照https://github.com/antergone/palm-netlify-proxy修改
+        const {
+            pathname,
+            searchParams
+        } = new URL(request.url);
+        if (pathname === "/") {
+            let blank_html = `
+		<!DOCTYPE html>
+		<html>
+		<head>
+		  <meta charset="UTF-8">
+		  <title>Language Model API reverse proxy for WeChat Assistant (Miyou) on Netlify Edge</title>
+		</head>
+		<body>
+		  <h1 id="wechat-miyou-api-proxy-on-netlify-edge">Language Model API reverse proxy for WeChat Assistant (Miyou) on Netlify Edge</h1>
+		  <p>Tips: This project can serve as a proxy for multiple large language models, currently supporting ChatGPT, Google PaLM Gemini-pro, and Aliyun Qianwen. </p>
+		  <ol>
+		  <li>When you see the error message &quot;User location is not supported for the API use&quot; when calling the Google PaLM API</li>
+		  <li>This project resolves the 'User location is not supported for the API use' issue in Google PaLM.</li>
+		  </ol>
+		  <p>For technical discussions, please visit <a href="https://github.com/GeekinGH/AiChatHelper/issues">https://github.com/GeekinGH/AiChatHelper</a></p>
+		</body>
+		</html>
+	    `
+                return new Response(blank_html, {
+                    headers: {
+                        ...CORS_HEADERS,
+                        "content-type": "text/html"
+                    },
+                });
+        }
+
+        const wxid = request.headers.get("wxid");
+        if (!wxid) {
+            throw new Error('未提供 wxid 头部信息');
+        }
+        const chatAuthorization = request.headers.get("authorization");
+        const apiKey = chatAuthorization ? chatAuthorization.replace('Bearer ', '') : '';
+        const requestBody = await request.json();
+        const chatModel = requestBody.model.toLowerCase().trim();
+        const countryName = context.geo?.country?.name || "somewhere in the world";
+
+        // 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
         if (wxidArray.length > 0 && !wxidArray.includes(wxid)) {
             return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
         }
-		
-	if (chatModel === 'gpt-3.5-turbo' || chatModel === 'gpt-4') {
+
+        if (chatModel === 'gpt-3.5-turbo' || chatModel === 'gpt-4') {
             return handleChatGPTRequest(requestBody, chatModel, chatAuthorization);
         } else if (chatModel === 'gemini-pro' || chatModel === 'gemini') {
             return handleGeminiRequest(requestBody, chatModel, apiKey);
@@ -48,16 +95,14 @@ export default async (request: Request, context: Context) => {
             return handleQwenRequest(requestBody, chatModel, apiKey);
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
-        }		
-	}catch (error) {
+        }
+    } catch (error) {
         return respondJsonMessage(`出错了: ${error.toString()}`);
-    }	
+    }
 }
 
 async function handleChatGPTRequest(requestBody, chatModel, apiKey) {
-
     const url = 'https://api.openai.com/v1/chat/completions';
-
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -81,7 +126,6 @@ async function handleChatGPTRequest(requestBody, chatModel, apiKey) {
 
         // 如果没有错误，返回 ChatGPT API 的响应
         return new Response(JSON.stringify(responseData));
-
     } catch (error) {
         return respondJsonMessage(`${chatModel}: ${error.toString()}`);
     }
@@ -89,7 +133,6 @@ async function handleChatGPTRequest(requestBody, chatModel, apiKey) {
 
 function formatMessagesForGemini(messages) {
     let formattedMessages = [];
-
     messages.forEach((item, index) => {
         if (index === 0) {
             formattedMessages.push({
@@ -117,17 +160,14 @@ function formatMessagesForGemini(messages) {
             });
         }
     });
-
     return formattedMessages;
 }
 
 async function handleGeminiRequest(requestBody, chatModel, apiKey) {
     try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-		
-	const chatMessages = requestBody.messages;
-	const contents = formatMessagesForGemini(chatMessages);
-		
+        const chatMessages = requestBody.messages;
+        const contents = formatMessagesForGemini(chatMessages);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -166,9 +206,7 @@ async function handleGeminiRequest(requestBody, chatModel, apiKey) {
 }
 
 async function handleQwenRequest(requestBody, chatModel, apiKey) {
-
     const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
-
     try {
         const response = await fetch(url, {
             method: 'POST',
