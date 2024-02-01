@@ -19,7 +19,7 @@ only for 微信助手，突破gemini对区域的限制
 4. Deploy with GitHub.
 5. 按提示授权 GitHub 到你的 Netlify。
 6. 选择你刚刚fork的项目
-7. Add environment variables 创建 WXID_ARRAY 这个环境变量（只创建一个别重复），values值为 wxid1,wxid2,wxid3 （替换为你需要授权的微信ID，不同的ID需要用英文逗号隔开,最后一个微信ID后面不要加逗号。如替换wxid1，记得完全替换别留下wxid开头，替换为你们自己的微信ID，以此类推。比如 lambous,lumauk)
+7. Add environment variables 创建 WXID_ARRAY 这个环境变量（只创建一个别重复），values值为 wxid1,wxid2,wxid3 （替换为你需要授权的微信ID，不同的ID需要用英文逗号隔开,最后一个微信ID后面不要加逗号。如你的微信ID是wxid_abcdefg,你就填写wxid_abcdefg;如果你的微信ID是lambous就填写lambous、开头别加wxid！以此类推可以添加很多很多不止三个的。比如 wxid_abcdefg,lambous,yourxxx)
 8. Deploy AiChatHelper
 9. 等待部署完成，你将获得一个二级域名，这就是你的代理地址，记住他（xxx.netlify.app；xxx可自定义，需要带上前缀https&#58;&#47;&#47;）
 10. 以后在GitHub修改你的代码，Netlity会自动更新代码并重新部署。
