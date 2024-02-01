@@ -27,8 +27,8 @@ only for 微信助手，突破gemini对区域的限制
 8. Deploy AiChatHelper
 9. 等待部署完成，你将获得一个二级域名，这就是你的代理地址，记住它。（xxx.netlify.app；xxx可自定义，需要带上前缀https&#58;&#47;&#47;）
 10. 以后在GitHub修改你的代码，Netlity会自动更新代码并重新部署。
-11. 第7步的环境变量WXID_ARRAY是在初次部署之前填写的。如果部署以后还需要修改环境变量WXID_ARRAY的值，修改之后请重新部署。(Retry deploy from latest branch commit)
-<img src="./images/configure-builds-retry-deploy-dropdown.png" width="400px">
+11. 第7步的环境变量WXID_ARRAY是在初次部署之前填写的。如果部署成功后再次修改环境变量WXID_ARRAY的值，请重新部署。
+<img src="./images/deploySite.png" width="400px"><img src="./images/configure-builds-retry-deploy-dropdown.png" width="400px">
 
 ## 使用方法
 以下操作都是在“微信助手”ChatGPT中操作：
