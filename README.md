@@ -13,7 +13,7 @@ only for 微信助手，突破gemini对区域的限制
 
 ## 部署到 Netlify
 
-1. 用邮箱注册[Netlify 帐号](https://www.netlify.com/)。注意：netlify.com和netlify.app的分流规则都必须设置为直连不可用魔法。<img src="./images/rules_netlify.jpg" width="400px">
+1. 用邮箱注册[Netlify 帐号](https://app.netlify.com/signup/)。注意：netlify.com和netlify.app的分流规则都必须设置为直连不可用魔法。<img src="./images/rules_netlify.jpg" width="400px">
 2. 在 [Netlify](https://app.netlify.com) 上创建一个新Site(Add new site)。
 3. 点击弹出的窗口 "Import an existing project" 。
 4. Deploy with GitHub.
