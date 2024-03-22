@@ -2,6 +2,7 @@ import { Context } from "@netlify/edge-functions";
 import Gemini from "./Gemini";
 import ChatGPT from "./ChatGPT";
 import Qwen from "./Qwen";
+import Qwen from "./Kimi";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
@@ -50,6 +51,9 @@ export default async (request: Request, context: Context) => {
         } else if (requestModel === 'qwen-turbo' || requestModel === 'qwen-max') {
             const qwen = new Qwen(requestModel, requestAuthorization, requestBody.messages);
             response = await qwen.handleResponse(await getResponse(qwen.url, 'POST', qwen.headers, qwen.body));
+        }  else if (requestModel === 'moonshot-v1-8k' || requestModel === 'moonshot-v1-32k') {
+            const qwen = new Kimi(requestModel, requestAuthorization, requestBody.messages);
+            response = await kimi.handleResponse(await getResponse(kimi.url, 'POST', kimi.headers, kimi.body));
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
