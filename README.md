@@ -1,7 +1,7 @@
-# 搭建ChatGPT、Gemini、通义千问反向代理
+# 搭建ChatGPT、Gemini、通义千问、Kimi 反向代理
 only for 微信助手，突破gemini对区域的限制
 
-欢迎来到微信助手 ChatGPT 反向代理项目！这个仓库帮助你部署 ChatGPT / Gemini-pro / 通义千问 反向代理，使其能够与懒猫的微信助手插件的 ChatGPT 功能协同工作。
+欢迎来到微信助手 ChatGPT 反向代理项目！这个仓库帮助你部署 ChatGPT / Gemini-pro / 通义千问 / Kimi 反向代理，使其能够与懒猫的微信助手插件的 ChatGPT 功能协同工作。
 
 # 直接把微信助手的反代部署到Netlify！！！
 这个方案独立的，不需要用到Cloudflare即可实现3种AI模型的代理，同时没有gemini的区域限制（User location is not supported for the API use）。
@@ -36,6 +36,7 @@ only for 微信助手，突破gemini对区域的限制
 2. 如果使用的是ChatGPT API，请在 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的gpt-4或者gpt-3.5-turbo。
 3. 如果使用的是Gemini-pro API，请在 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini-pro (或填写简称Gemini)。
 4. 如果使用的是通义千问 API，请在 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：qwen-turbo或qwen-max。
+5. 如果使用的是Moonshot Kimi API，请在 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：moonshot-v1-8k或moonshot-v1-32k（微信文本长度应该不支持moonshot-v1-128k的长度，所以没写进去）。
 
 ## 其他事项
 - 部分代码参考了懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
