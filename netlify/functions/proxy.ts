@@ -52,7 +52,7 @@ export default async (request: Request, context: Context) => {
             const qwen = new Qwen(requestModel, requestAuthorization, requestBody.messages);
             response = await qwen.handleResponse(await getResponse(qwen.url, 'POST', qwen.headers, qwen.body));
         }  else if (requestModel === 'moonshot-v1-8k' || requestModel === 'moonshot-v1-32k') {
-            const qwen = new Kimi(requestModel, requestAuthorization, requestBody.messages);
+            const kimi = new Kimi(requestModel, requestAuthorization, requestBody.messages);
             response = await kimi.handleResponse(await getResponse(kimi.url, 'POST', kimi.headers, kimi.body));
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
