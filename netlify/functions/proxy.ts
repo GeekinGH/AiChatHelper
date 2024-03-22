@@ -2,7 +2,7 @@ import { Context } from "@netlify/edge-functions";
 import Gemini from "./Gemini";
 import ChatGPT from "./ChatGPT";
 import Qwen from "./Qwen";
-import Qwen from "./Kimi";
+import Kimi from "./Kimi";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
