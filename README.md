@@ -36,7 +36,7 @@ only for 微信助手，突破gemini对区域的限制
 2. 如果使用的是ChatGPT API，请在 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的gpt-4或者gpt-3.5-turbo。
 3. 如果使用的是Gemini-pro API，请在 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：Gemini-pro (或填写简称Gemini)。
 4. 如果使用的是通义千问 API，请在 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：qwen-turbo或qwen-max。
-5. 如果使用的是Moonshot Kimi API，请在 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：moonshot-v1-8k或moonshot-v1-32k（微信文本长度应该不支持moonshot-v1-128k的长度，所以没写进去）。
+5. 如果使用的是Moonshot Kimi API，请在 “APIKey”中填写Kimi的API Key，在“模型”中选择 手动输入 ，填写：moonshot-v1-8k或moonshot-v1-32k（微信文本长度应该不支持moonshot-v1-128k的长度，所以没写进去）。【Kimi的API申请https://login.moonshot.cn/】
 
 ## 其他事项
 - 部分代码参考了懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
