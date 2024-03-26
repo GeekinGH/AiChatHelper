@@ -24,7 +24,7 @@ export default class Claude3 {
         if (!this.headers) {
             this.headers = {
               'x-api-key': this.authorization,
-              'nthropic-version': '2023-06-01',
+              'anthropic-version': '2023-06-01',
               'Content-Type': 'application/json'};
         }
     }
