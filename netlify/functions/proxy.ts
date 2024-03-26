@@ -3,6 +3,7 @@ import Gemini from "./Gemini";
 import ChatGPT from "./ChatGPT";
 import Qwen from "./Qwen";
 import Kimi from "./Kimi";
+import Claude3 from "./Claude3";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
@@ -54,6 +55,9 @@ export default async (request: Request, context: Context) => {
         }  else if (requestModel === 'moonshot-v1-8k' || requestModel === 'moonshot-v1-32k') {
             const kimi = new Kimi(requestModel, requestAuthorization, requestBody.messages);
             response = await kimi.handleResponse(await getResponse(kimi.url, 'POST', kimi.headers, kimi.body));
+        }  else if (requestModel === 'claude-3-opus-20240229') {
+            const claude3 = new Claude3(requestModel, requestAuthorization, requestBody.messages);
+            response = await claude3.handleResponse(await getResponse(claude3.url, 'POST', claude3.headers, claude3.body));
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
