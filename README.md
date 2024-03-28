@@ -17,7 +17,7 @@ $\color{red}{如果希望部署到自建服务器，或者任意安装了NodeJs�
 1.1 Github授权登录的方式可能会引起身份审核；<br>
 1.2 邮箱注册也有可能引起身份审核，尝试换邮箱地址，比如国外的邮箱；<br>
 1.3 netlify.com和netlify.app的分流规则，建议设置为直连，不用魔法。<br>
-<img src="./images/rules_netlify.jpg" width="400px"><br>
+<img src="./images/rules_netlify.jpg" width="400px">
 2. 在 [Netlify](https://app.netlify.com) 上创建一个新Site(Add new site)。<br>
 3. 点击弹出的窗口 "Import an existing project" 。<br>
 4. Deploy with GitHub.<br>
