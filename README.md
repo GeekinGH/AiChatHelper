@@ -38,7 +38,7 @@ $\color{red}{如果希望部署到自建服务器，或者任意安装了NodeJs�
 以下操作都是在“微信助手”ChatGPT中操作：
 1. 将你的代理地址填写到“代理地址”栏。（https&#58;&#47;&#47;xxx.netlify.app）
 2. 如果使用的是ChatGPT API，请在 “APIKey”中填写ChatGPT(Openai)的API Key，在“模型”中选择对应的<B>gpt-4</B>或者<B>gpt-3.5-turbo</B>。
-3. 如果使用的是Gemini-pro API，请在 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：<B>Gemini-pro</B> (或填写简称Gemini)。
+3. 如果使用的是Gemini-pro API，请在 “APIKey”中填写Gemini-pro的API Key，在“模型”中选择 手动输入 ，填写：<B>Gemini-pro</B>或者<B>gemini-1.5-pro-latest</B>。
 4. 如果使用的是通义千问 API，请在 “APIKey”中填写Qwen的API Key，在“模型”中选择 手动输入 ，填写：<B>qwen-turbo</B>或<B>qwen-max</B>。
 5. 如果使用的是Moonshot Kimi API，请在 “APIKey”中填写Kimi的API Key，在“模型”中选择 手动输入 ，填写：<B>moonshot-v1-8k</B>或<B>moonshot-v1-32k</B>（微信文本应该不支持moonshot-v1-128k的长度，所以没写进去）。【Kimi的API申请https://login.moonshot.cn/】
 6. 如果使用的是Claude3 API，请在 “APIKey”中填写Claude3的API Key，在“模型”中选择 手动输入 ，填写：<B>claude-3-opus-20240229</B>
