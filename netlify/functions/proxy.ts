@@ -43,25 +43,26 @@ export default async (request: Request, context: Context) => {
         }
 
         let response;
-        if (requestModel === 'gpt-3.5-turbo' || requestModel === 'gpt-4') {
-            const chatGPT = new ChatGPT(requestModel, requestAuthorization, requestBody.messages);
-            response = await chatGPT.handleResponse(await getResponse(chatGPT.url, 'POST', chatGPT.headers, chatGPT.body));
-        } else if (requestModel === 'gemini-pro' || requestModel === 'gemini') {
-            const gemini = new Gemini(requestModel, requestAuthorization, requestBody.messages);
-            response = await gemini.handleResponse(await getResponse(gemini.url, 'POST', gemini.headers, gemini.body));
-        } else if (requestModel === 'qwen-turbo' || requestModel === 'qwen-max') {
-            const qwen = new Qwen(requestModel, requestAuthorization, requestBody.messages);
-            response = await qwen.handleResponse(await getResponse(qwen.url, 'POST', qwen.headers, qwen.body));
-        }  else if (requestModel === 'moonshot-v1-8k' || requestModel === 'moonshot-v1-32k') {
-            const kimi = new Kimi(requestModel, requestAuthorization, requestBody.messages);
-            response = await kimi.handleResponse(await getResponse(kimi.url, 'POST', kimi.headers, kimi.body));
-        }  else if (requestModel === 'claude-3-opus-20240229') {
-            const claude3 = new Claude3(requestModel, requestAuthorization, requestBody.messages);
-            response = await claude3.handleResponse(await getResponse(claude3.url, 'POST', claude3.headers, claude3.body));
+        const supportedModels = {
+            'gpt-3.5-turbo': ChatGPT,
+            'gpt-4': ChatGPT,
+            'gemini-pro': Gemini,
+            'gemini': Gemini,
+            'gemini-1.5-pro-latest': Gemini,
+            'qwen-turbo': Qwen,
+            'qwen-max': Qwen,
+            'moonshot-v1-8k': Kimi,
+            'moonshot-v1-32k': Kimi,
+            'claude-3-opus-20240229': Claude3
+        };
+        
+        const ModelClass = supportedModels[requestModel];
+        if (ModelClass) {
+            const modelInstance = new ModelClass(requestModel, requestAuthorization, requestBody.messages);
+            response = await modelInstance.handleResponse(await getResponse(modelInstance.url, 'POST', modelInstance.headers, modelInstance.body));
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
-
         return respondJsonMessage(response);
     } catch (error) {
         console.error('Error:', error); // 记录错误信息
