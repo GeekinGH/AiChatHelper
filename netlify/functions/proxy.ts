@@ -26,6 +26,20 @@ function respondJsonMessage(message) {
     });
 }
 
+// 全局范围定义 supportedModels（支持的模型） 对象
+const supportedModels = {
+    'gpt-3.5-turbo': ChatGPT,
+    'gpt-4': ChatGPT,
+    'gemini-pro': Gemini,
+    'gemini': Gemini,
+    'gemini-1.5-pro-latest': Gemini,
+    'qwen-turbo': Qwen,
+    'qwen-max': Qwen,
+    'moonshot-v1-8k': Kimi,
+    'moonshot-v1-32k': Kimi,
+    'claude-3-opus-20240229': Claude3
+};
+
 export default async (request: Request, context: Context) => {
     try {
         const wxid = request.headers.get("wxid");
@@ -35,7 +49,6 @@ export default async (request: Request, context: Context) => {
         const requestAuthorization = request.headers.get("authorization");
         const requestBody = await request.json();
         const requestModel = requestBody.model.toLowerCase().trim();
-        const countryName = context.geo?.country?.name || "somewhere in the world";
 
         // 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
         if (wxidArray.length > 0 && !wxidArray.includes(wxid)) {
@@ -43,19 +56,6 @@ export default async (request: Request, context: Context) => {
         }
 
         let response;
-        const supportedModels = {
-            'gpt-3.5-turbo': ChatGPT,
-            'gpt-4': ChatGPT,
-            'gemini-pro': Gemini,
-            'gemini': Gemini,
-            'gemini-1.5-pro-latest': Gemini,
-            'qwen-turbo': Qwen,
-            'qwen-max': Qwen,
-            'moonshot-v1-8k': Kimi,
-            'moonshot-v1-32k': Kimi,
-            'claude-3-opus-20240229': Claude3
-        };
-        
         const ModelClass = supportedModels[requestModel];
         if (ModelClass) {
             const modelInstance = new ModelClass(requestModel, requestAuthorization, requestBody.messages);
