@@ -9,11 +9,11 @@ export default class Gemini {
     constructor(requestModel: string, requestAuthorization: string, requestMessages: any) {
         this.model = requestModel;
         this.authorization = requestAuthorization ? requestAuthorization.replace('Bearer ', '') : '';
-        if (this.model === "gmini") {
-            this.url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${this.authorization}`;
-        } else {
-            this.url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.authorization}`;
+        if (this.model === "gemini") {
+            this.model = "gemini-pro";
         }
+        this.url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.authorization}`;
+        
         this.formatHeaders();
         try {
             this.formatBody(requestMessages);
