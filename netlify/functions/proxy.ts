@@ -60,10 +60,10 @@ export default async (request: Request, context: Context) => {
         if (ModelClass) {
             const modelInstance = new ModelClass(requestModel, requestAuthorization, requestBody.messages);
             response = await modelInstance.handleResponse(await getResponse(modelInstance.url, 'POST', modelInstance.headers, modelInstance.body));
+            return respondJsonMessage(response);
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
-        return respondJsonMessage(response);
     } catch (error) {
         console.error('Error:', error); // 记录错误信息
         return respondJsonMessage(`出错了: ${error.toString()}`);
