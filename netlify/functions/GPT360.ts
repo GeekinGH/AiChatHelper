@@ -1,4 +1,4 @@
-export default class 360GPT {
+export default class GPT360 {
     model: string;
     authorization: string;
     messages: any;
