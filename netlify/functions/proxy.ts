@@ -8,6 +8,20 @@ import Claude3 from "./Claude3";
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
+// 全局范围定义 supportedModels（支持的模型） 对象
+const supportedModels = {
+    'gpt-3.5-turbo': ChatGPT,
+    'gpt-4': ChatGPT,
+    'gemini-pro': Gemini,
+    'gemini': Gemini,
+    'gemini-1.5-pro-latest': Gemini,
+    'qwen-turbo': Qwen,
+    'qwen-max': Qwen,
+    'moonshot-v1-8k': Kimi,
+    'moonshot-v1-32k': Kimi,
+    'claude-3-opus-20240229': Claude3
+};
+
 // 全局范围定义 respondJsonMessage 函数
 function respondJsonMessage(message) {
     const jsonMessage = {
@@ -26,34 +40,24 @@ function respondJsonMessage(message) {
     });
 }
 
-// 全局范围定义 supportedModels（支持的模型） 对象
-const supportedModels = {
-    'gpt-3.5-turbo': ChatGPT,
-    'gpt-4': ChatGPT,
-    'gemini-pro': Gemini,
-    'gemini': Gemini,
-    'gemini-1.5-pro-latest': Gemini,
-    'qwen-turbo': Qwen,
-    'qwen-max': Qwen,
-    'moonshot-v1-8k': Kimi,
-    'moonshot-v1-32k': Kimi,
-    'claude-3-opus-20240229': Claude3
-};
-
 export default async (request: Request, context: Context) => {
     try {
         const wxid = request.headers.get("wxid");
         if (!wxid) {
             throw new Error('未提供 wxid 头部信息');
         }
-        const requestAuthorization = request.headers.get("authorization");
-        const requestBody = await request.json();
-        const requestModel = requestBody.model.toLowerCase().trim();
-
         // 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
         if (wxidArray.length > 0 && !wxidArray.includes(wxid)) {
             return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
         }
+        
+        const requestAuthorization = request.headers.get("authorization");
+        if (!requestAuthorization) {
+            throw new Error('未提供 API Key');
+        }
+        
+        const requestBody = await request.json();
+        const requestModel = requestBody.model.toLowerCase().trim();
 
         let response;
         const ModelClass = supportedModels[requestModel];
