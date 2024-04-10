@@ -107,8 +107,12 @@ export default class GPT360 {
             }
         } else {
             // 文生图模式
-            if (responseData.status === 'success' && responseData.output && responseData.output.length > 0) {
-                return responseData.output[0];
+            if (responseData.status === 'success' && responseData.output) {
+                if (responseData.output.length > 0){
+                  return responseData.output[0];
+                } else {
+                  return '鉴于关键词过滤原因，无法根据您的关键词生图';
+                }
             } else {
                 return `${this.model}: 无法解析响应数据`;
             }
