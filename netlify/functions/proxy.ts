@@ -9,6 +9,9 @@ import GPT360 from "./GPT360";
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
+//360 API Key
+const APIKEY360 = "";
+
 // 全局范围定义 supportedModels（支持的模型） 对象
 const supportedModels = {
     'gpt-3.5-turbo': ChatGPT,
@@ -53,18 +56,26 @@ export default async (request: Request, context: Context) => {
             return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
         }
         
-        const requestAuthorization = request.headers.get("authorization");
+        let requestAuthorization = request.headers.get("authorization");
         if (!requestAuthorization) {
             throw new Error('未提供 API Key');
         }
         
         const requestBody = await request.json();
-        const requestModel = requestBody.model.toLowerCase().trim();
+        let requestModel = requestBody.model.toLowerCase().trim();
+        const requestMessages = requestBody.messages;
+        const lastMessage = requestMessages[requestMessages.length - 1].content.trim();
 
+        // 判断是否需要文生图模式
+        if (APIKEY360 !== "" && lastMessage.startsWith("画")) {
+            requestModel = "360gpt-pro";
+            requestAuthorization = APIKEY360;
+        }
+        
         let response;
         const ModelClass = supportedModels[requestModel];
         if (ModelClass) {
-            const modelInstance = new ModelClass(requestModel, requestAuthorization, requestBody.messages);
+            const modelInstance = new ModelClass(requestModel, requestAuthorization, requestMessages);
             response = await modelInstance.handleResponse(await getResponse(modelInstance.url, 'POST', modelInstance.headers, modelInstance.body));
             return respondJsonMessage(response);
         } else {
