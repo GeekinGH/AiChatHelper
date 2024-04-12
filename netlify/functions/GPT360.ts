@@ -69,20 +69,19 @@ export default class GPT360 {
                 this.body = {};
             }
 
-            // 将格式化后的 lastMessage 转换为文生图格式的 body
-            this.body = {
-                "model": "360CV_S0_V5",
-                "style": "realistic",
-                "prompt": lastMessage,
-                "negative_prompt": "",
-                "guidance_scale": 7.5,
-                "height": 512,
-                "width": 512,
-                "num_inference_steps": 25,
-                "samples": 1,
-                "seed": 49022,
-                "enhance_prompt": false
-            };
+            // 将提取的 lastMessage 转换为文生图格式的 body
+          this.body = {
+            "model": "360CV_S0_V5",
+            "style": "realistic",
+            "prompt": lastMessage.substring(1),
+            "negative_prompt": "",
+            "guidance_scale": 15,
+            "height": 1920,
+            "width": 1080,
+            "num_inference_steps": 50,
+            "samples": 1,
+            "enhance_prompt": true
+          };
         } catch (error) {
             console.error('Error formatting messages:', error);
             throw error;
