@@ -49,16 +49,16 @@ export default async (request: Request, context: Context) => {
     try {
         const wxid = request.headers.get("wxid");
         if (!wxid) {
-            throw new Error('未提供 wxid 头部信息');
+            throw new Error('您的请求不兼容于本服务');
         }
         // 判断 wxidArray 是否为空，如果为空则不进行授权验证，直接执行后续程序
         if (wxidArray.length > 0 && !wxidArray.includes(wxid)) {
-            return respondJsonMessage('我是狗，偷接口，偷了接口当小丑～');
+            return respondJsonMessage('当您看到这个信息，说明您需要联系本服务提供者进行使用授权');
         }
         
         let requestAuthorization = request.headers.get("authorization");
         if (!requestAuthorization) {
-            throw new Error('未提供 API Key');
+            throw new Error('请提供API鉴权码');
         }
         
         const requestBody = await request.json();
