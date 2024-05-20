@@ -2,13 +2,17 @@
 only for 微信助手<br>
 把微信助手的反代部署到Netlify，不需要用到Cloudflare即可实现多种AI模型的代理，同时没有gemini的区域限制（User location is not supported for the API use）。
 
+# 有三个相同功能的不同部署环境的项目：
+1、部署到Netlify的，就是本仓库。目前Netlify注册有难度，已经有Netlify账户的可以尝试它；<br>
+2、部署到自己的服务器或者任何可以搭建NodeJs环境的服务器的，请移步到[AiChatHelperNodejs](https://github.com/GeekinGH/AiChatHelperNodejs)；<br>
+3、部署到CloudFlare的，目前有新的办法可以解决Gemini区域限制和域名问题，目前来看是最省钱最简单的实现方法，请移步到[AiChatHelperCFW](https://github.com/GeekinGH/AiChatHelperCFW)；<br>
+
 ## Fork 仓库
 
 1. 注册一个你自己的GitHub账户。
 2. 来到我这个仓库，点击仓库右上角的 "Fork" 按钮，创建你自己的分支。
 
 ## 部署到 Netlify
-$\color{red}{如果希望部署到自建服务器，或者任意安装了NodeJs环境的服务器（比如腾讯云函数）中，请移步到}$[另外一个仓库](https://github.com/GeekinGH/AiChatHelperNodejs)<br>
 1. 用 $\color{red}{邮箱}$ 注册[Netlify 帐号](https://app.netlify.com/signup/)。<br>
 注意：<br>
 1.1 Github授权登录的方式可能会引起身份审核；<br>
@@ -40,6 +44,7 @@ $\color{red}{如果希望部署到自建服务器，或者任意安装了NodeJs�
 |-----------|-------------|-----------------|
 | ChatGPT 3.5  | ChatGPT 3.5 API Key | 选择：gpt-3.5-turbo |
 | ChatGPT plus  | ChatGPT 4 API Key | 选择：gpt-4 |
+| GPT-4o  | GPT-4o API Key | 手动输入，填写：GPT-4o |
 | Gemini-pro 1.0 | Gemini 1.0 API Key | 手动输入，填写：Gemini-pro |
 | Gemini-pro 1.5 | Gemini 1.5 API Key | 手动输入，填写：gemini-1.5-pro-latest |
 | 通义千问   | Qwen API Key    | 手动输入，填写：qwen-turbo(弃用) 或 qwen-max |
