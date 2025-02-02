@@ -20,6 +20,8 @@ const supportedModels = {
     'gemini-pro': Gemini,
     'gemini': Gemini,
     'gemini-1.5-pro-latest': Gemini,
+    'gemini-1.5-flash': Gemini,
+    'gemini-2.0-flash-exp': Gemini,
     'qwen-turbo': Qwen,
     'qwen-max': Qwen,
     'moonshot-v1-8k': Kimi,
