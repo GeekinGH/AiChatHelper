@@ -5,6 +5,7 @@ import Qwen from "./Qwen";
 import Kimi from "./Kimi";
 import Claude3 from "./Claude3";
 import GPT360 from "./GPT360";
+import DeepSeek from "./DeepSeek";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
@@ -27,7 +28,9 @@ const supportedModels = {
     'moonshot-v1-8k': Kimi,
     'moonshot-v1-32k': Kimi,
     'claude-3-opus-20240229': Claude3,
-    '360gpt-pro': GPT360
+    '360gpt-pro': GPT360,
+    'deepseek-chat': DeepSeek,
+    'deepseek-reasoner': DeepSeek
 };
 
 // 全局范围定义 respondJsonMessage 函数
