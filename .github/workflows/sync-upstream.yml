@@ -1,0 +1,45 @@
+name: Auto Sync Upstream (Master Branch)
+
+on:
+  schedule:
+    # 每天北京时间 2:00 执行（UTC 18:00）
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 必须的推送权限
+
+    steps:
+    - name: Checkout current repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整历史
+        ref: master      # 明确指定 master 分支
+
+    - name: Configure Git Identity
+      run: |
+        git config user.name "GitHub Actions Syncer"
+        git config user.email "actions@users.noreply.github.com"
+
+    - name: Add upstream repository
+      run: |
+        git remote add upstream https://github.com/GeekinGH/AiChatHelper.git
+        git fetch upstream master  # 拉取上游最新代码
+
+    - name: Merge Upstream Changes (Keep Workflows)
+      run: |
+        git checkout master
+        git merge --no-edit upstream/master || true  # 避免冲突阻止合并
+        git add .github/workflows/  # 确保 workflow 目录不会丢失
+        git commit --amend --no-edit  # 保持原来的 commit 消息
+        git push origin master --force --verbose
+
+    - name: Update Sync Timestamp
+      run: |
+        echo "Last sync: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > sync_timestamp.txt
+        git add sync_timestamp.txt
+        git commit --amend --no-edit  # 保持提交信息不变
+        git push origin master --force --verbose
