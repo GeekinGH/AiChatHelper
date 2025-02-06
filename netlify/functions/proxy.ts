@@ -93,17 +93,27 @@ export default async (request: Request, context: Context) => {
     }
 }
 
-async function getResponse(url, method, headers, body) {
-    const response = await fetch(url, {
-        method: method,
-        headers: headers,
-        body: JSON.stringify(body),
-    });
+async function getResponse(url, method, headers, body, timeout = 10000) {
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Request Timeout: Exceeded ${timeout}ms`)), timeout)
+    );
 
-    if (response.status !== 200) {
-        return respondJsonMessage(`HTTP Error: ${response.status}`);
+    try {
+        const response = await Promise.race([
+            fetch(url, {
+                method,
+                headers,
+                body: JSON.stringify(body),
+            }),
+            timeoutPromise,
+        ]);
+
+        if (!response.ok) {
+            return respondJsonMessage(`HTTP Error: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        return respondJsonMessage(error.message);
     }
-
-    const responseData = await response.json();
-    return responseData;
 }
