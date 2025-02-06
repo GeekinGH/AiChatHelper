@@ -99,6 +99,11 @@ async function getResponse(url, method, headers, body) {
         headers: headers,
         body: JSON.stringify(body),
     });
+
+    if (response.status !== 200) {
+        return respondJsonMessage(`HTTP Error: ${response.status}`);
+    }
+
     const responseData = await response.json();
     return responseData;
 }
