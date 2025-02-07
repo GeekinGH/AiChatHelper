@@ -56,7 +56,7 @@ only for 微信助手<br>
 | DeepSeek   | DeepSeek-V3 | 手动输入，填写：deepseek-chat |
 | DeepSeek   | DeepSeek-R1 | 手动输入，填写：deepseek-reasoner |
 3. 360AI支持文生图功能，在聊天中，话术为：画xxxxxxxx，AI则会返回一个图片链接。比如：画一个蓝天白云的图片。
-4. DeepSeek-R1 因为WeChat的字数限制，删除了推理过程，直接输出结果。
+4. DeepSeek-R1 因为WeChat的字数限制，删除了推理过程，直接输出结果。DeepSeek 可以不用反代，直接输入 API 地址 https://api.deepseek.com
 
 ## 其他事项
 - 部分代码参考了懒猫提供的Gemini.zip，[懒猫插件交流](https://t.me/maogroup)
