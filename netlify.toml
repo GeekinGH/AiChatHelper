@@ -2,5 +2,8 @@
   publish = "dist"
   command = "npm run build"
 
-[[functions]]
+[functions]
   directory = "functions"
+  external_node_modules = [
+    "@netlify/edge-functions"
+  ]
