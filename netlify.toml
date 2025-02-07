@@ -1,9 +1,8 @@
 [build]
-  publish = "dist"
-  command = "npm run build"
+  command = "npm run build"  # 运行 TypeScript 编译命令
+  functions = "functions"    # Netlify Edge Functions 目录，指向 TypeScript 代码目录
 
 [functions]
-  directory = "functions"
   external_node_modules = [
     "@netlify/edge-functions"
   ]
