@@ -1,20 +1,23 @@
 import { Context } from "@netlify/edge-functions";
-import Gemini from "./Gemini";
-import ChatGPT from "./ChatGPT";
-import Qwen from "./Qwen";
-import Kimi from "./Kimi";
-import Claude3 from "./Claude3";
-import GPT360 from "./GPT360";
-import DeepSeek from "./DeepSeek";
+import Gemini from "./models/Gemini";
+import ChatGPT from "./models/ChatGPT";
+import Qwen from "./models/Qwen";
+import Kimi from "./models/Kimi";
+import Claude3 from "./models/Claude3";
+import GPT360 from "./models/GPT360";
+import DeepSeek from "./models/DeepSeek";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
 
-//360 API Key
-const APIKEY360 = "";
+// 从 Netlify 的环境变量中获取 360 API Key 用来文生图
+const APIKEY360 = process.env.APIKEY360 || "";
 
-// 全局范围定义 supportedModels（支持的模型） 对象
-const supportedModels = {
+// 从 Netlify 的环境变量中获取支持的模型
+const supportedModelsEnv = process.env.SUPPORTED_MODELS ? JSON.parse(process.env.SUPPORTED_MODELS) : {};
+
+// 默认支持的模型
+const defaultSupportedModels = {
     'gpt-3.5-turbo': ChatGPT,
     'gpt-4': ChatGPT,
     'GPT-4o': ChatGPT,
@@ -33,8 +36,11 @@ const supportedModels = {
     'deepseek-reasoner': DeepSeek
 };
 
+// 合并默认支持的模型和环境变量中的支持模型
+const supportedModels = { ...defaultSupportedModels, ...supportedModelsEnv };
+
 // 全局范围定义 respondJsonMessage 函数
-function respondJsonMessage(message) {
+function respondJsonMessage(message: string) {
     const jsonMessage = {
         choices: [{
             message: {
@@ -87,21 +93,21 @@ export default async (request: Request, context: Context) => {
         } else {
             return respondJsonMessage('不支持的 chat_model 类型');
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error:', error); // 记录错误信息
         return respondJsonMessage(`出错了: ${error.toString()}`);
     }
 }
 
-async function getResponse(url, method, headers, body) {
+async function getResponse(url: string, method: string, headers: HeadersInit, body: any) {
     const response = await fetch(url, {
         method: method,
         headers: headers,
         body: JSON.stringify(body),
     });
 
-    if (response.status !== 200) {
-        return respondJsonMessage(`HTTP Error: ${response.status}`);
+    if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
     }
 
     const responseData = await response.json();

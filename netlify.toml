@@ -1,5 +1,6 @@
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/proxy"
-  status = 200
-  force = true
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[functions]]
+  directory = "functions"
