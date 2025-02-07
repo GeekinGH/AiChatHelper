@@ -1,11 +1,11 @@
 import { Context } from "@netlify/edge-functions";
-import Gemini from "./models/Gemini";
-import ChatGPT from "./models/ChatGPT";
-import Qwen from "./models/Qwen";
-import Kimi from "./models/Kimi";
-import Claude3 from "./models/Claude3";
-import GPT360 from "./models/GPT360";
-import DeepSeek from "./models/DeepSeek";
+import Gemini from "./Gemini";
+import ChatGPT from "./ChatGPT";
+import Qwen from "./Qwen";
+import Kimi from "./Kimi";
+import Claude3 from "./Claude3";
+import GPT360 from "./GPT360";
+import DeepSeek from "./DeepSeek";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];

@@ -1,8 +1,5 @@
-[build]
-  command = "npm run build"  # 运行 TypeScript 编译命令
-  functions = "functions"    # Netlify Edge Functions 目录，指向 TypeScript 代码目录
-
-[functions]
-  external_node_modules = [
-    "@netlify/edge-functions"
-  ]
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/proxy"
+  status = 200
+  force = true

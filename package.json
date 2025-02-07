@@ -1,16 +1,9 @@
 {
   "name": "aichathelper",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "@netlify/edge-functions": "^2.2.0"
-  },
+  "scripts": {},
+  "dependencies": {},
   "devDependencies": {
-    "typescript": "^4.0.0",
-    "@types/node": "^18.0.0"
+      "@netlify/edge-functions": "2.2.0"
   }
 }
