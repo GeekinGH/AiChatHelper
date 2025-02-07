@@ -36,8 +36,15 @@ const defaultSupportedModels = {
     'deepseek-reasoner': DeepSeek
 };
 
-// 合并默认支持的模型和环境变量中的支持模型
-const supportedModels = { ...defaultSupportedModels, ...supportedModelsEnv };
+// 合并默认支持的模型和环境变量中的支持模型，动态解析类名
+const supportedModels = {
+    ...defaultSupportedModels,
+    ...Object.fromEntries(
+        Object.entries(supportedModelsEnv).map(([key, value]) => {
+            return [key, eval(value as string)];  
+        })
+    )
+};
 
 // 全局范围定义 respondJsonMessage 函数
 function respondJsonMessage(message: string) {
