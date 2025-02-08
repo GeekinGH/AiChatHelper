@@ -1,71 +1,45 @@
-export default class Qwen {
-    model: string;
-    authorization: string;
-    messages: any;
-    headers: any;
-    body: any;
-    url: string;
+import BaseModel from './BaseModel';
 
+export default class Qwen extends BaseModel {
     constructor(requestModel: string, requestAuthorization: string, requestMessages: any) {
-        this.model = requestModel;
-        this.authorization = requestAuthorization;
-        this.url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
-        this.formatHeaders();
-        this.formatBody(requestMessages);
+        super(requestModel, requestAuthorization, requestMessages, 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation');
     }
 
-    private formatHeaders() {
-        // 检查是否已经存在 headers，如果存在则不重新初始化
-        if (!this.headers) {
-            this.headers = {
-                'Content-Type': 'application/json',
-                'Authorization': this.authorization,
-            };
+    protected formatBody(requestMessages: any) {
+        if (typeof this.body !== 'object' || this.body === null) {
+            this.body = {};
         }
-    }
 
-    private formatBody(requestMessages) {
-        try {
-            // 确保this.body是对象类型，否则进行初始化
-            if (typeof this.body !== 'object' || this.body === null) {
-                this.body = {};
-            }
-
-            let formattedMessages = [];
-            requestMessages.forEach((item, index) => {
-                if (index === 0 && item.role === 'system') {
-                    let itemContent = item.content.trim();
-                    if (itemContent === "") {
-                        itemContent = '你是通义千问';
-                    }
-                    formattedMessages.push({
-                        'role': 'system',
-                        'content': itemContent,
-                    });
-                } else if (index === 1 && item.role === 'assistant') {
-                    // 忽略掉第二条消息
-                } else {
-                    formattedMessages.push({
-                        'role': item.role,
-                        'content': item.content,
-                    });
+        let formattedMessages: { role: string, content: string }[] = [];
+        requestMessages.forEach((item: { role: string, content: string }, index: number) => {
+            if (index === 0 && item.role === 'system') {
+                let itemContent = item.content.trim();
+                if (itemContent === "") {
+                    itemContent = '你是通义千问';
                 }
-            });
+                formattedMessages.push({
+                    'role': 'system',
+                    'content': itemContent,
+                });
+            } else if (index === 1 && item.role === 'assistant') {
+                // 忽略掉第二条消息
+            } else {
+                formattedMessages.push({
+                    'role': item.role,
+                    'content': item.content,
+                });
+            }
+        });
 
-            this.messages = formattedMessages;
+        this.messages = formattedMessages;
 
-            // 将格式化后的 messages 转换为自己格式的 body
-            this.body = {
-                'model': this.model,
-                'input': {
-                    'messages': this.messages,
-                },
-                'parameters': {},
-            };
-        } catch (error) {
-            console.error('Error formatting messages:', error);
-            throw error;
-        }
+        this.body = {
+            'model': this.model,
+            'input': {
+                'messages': this.messages,
+            },
+            'parameters': {},
+        };
     }
 
     handleResponse(responseData: any) {
