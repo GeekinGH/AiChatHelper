@@ -20,25 +20,34 @@ export default class Gemini extends BaseModel {
         let formattedMessages: { role: string, parts: { text: string }[] }[] = [];
         requestMessages.forEach((item: { role: string, content: string }, index: number) => {
             if (index === 0) {
-                formattedMessages.push({
-                    'role': 'user',
-                    'parts': [{
-                        'text': item.content,
-                    }],
-                }, {
-                    'role': 'model',
-                    'parts': [{
-                        'text': '好的',
-                    }],
-                });
+                formattedMessages.push(
+                    {
+                        'role': 'user',
+                        'parts': [
+                            {
+                                'text': item.content,
+                            },
+                        ],
+                    },
+                    {
+                        'role': 'model',
+                        'parts': [
+                            {
+                                'text': '好的',
+                            },
+                        ],
+                    }
+                );
             } else if (index === 1 && item.role === 'assistant') {
                 // 忽略掉第二条消息
             } else {
                 formattedMessages.push({
                     'role': (item.role === 'assistant') ? 'model' : 'user',
-                    'parts': [{
-                        'text': item.content,
-                    }],
+                    'parts': [
+                        {
+                            'text': item.content,
+                        },
+                    ],
                 });
             }
         });
@@ -53,16 +62,26 @@ export default class Gemini extends BaseModel {
                 { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" },
                 { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" }
             ],
-            "tools": [{  // 添加 tools 参数，增加谷歌搜索功能, 感谢 @SugarCarry 的贡献
-                "googleSearch": {}
-            }]
+            "tools": [
+                {
+                    // 添加 tools 参数，增加谷歌搜索功能, 感谢 @SugarCarry 的贡献
+                    "google_search_retrieval": {
+                        "dynamic_retrieval_config": {
+                            "mode": "MODE_DYNAMIC"
+                        }
+                    }
+                }
+            ]
         };
     }
 
     handleResponse(responseData: any) {
         if (responseData.candidates && responseData.candidates.length > 0) {
-            if (responseData.candidates[0].content && responseData.candidates[0].content.parts &&
-                responseData.candidates[0].content.parts.length > 0) {
+            if (
+                responseData.candidates[0].content &&
+                responseData.candidates[0].content.parts &&
+                responseData.candidates[0].content.parts.length > 0
+            ) {
                 return responseData.candidates[0].content.parts[0].text;
             } else {
                 return `${this.model} API 返回未知错误: 无法获取有效的响应文本`;
