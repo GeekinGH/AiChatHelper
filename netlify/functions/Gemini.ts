@@ -45,8 +45,7 @@ export default class Gemini extends BaseModel {
 
         this.messages = formattedMessages;
 
-        if (['gemini-2.0-flash-exp', 'gemini-2.0-flash', 'gemini-2.0-pro-exp'].includes(this.model)) {
-            this.body = {
+        this.body = {
             'contents': this.messages,
             "safetySettings": [
                 { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
@@ -57,18 +56,7 @@ export default class Gemini extends BaseModel {
             "tools": [{  // 添加 tools 参数，增加谷歌搜索功能, 感谢 @SugarCarry 的贡献
                 "googleSearch": {}
             }]
-            };
-        } else {
-            this.body = {
-            'contents': this.messages,
-            "safetySettings": [
-                { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
-                { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" },
-                { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" },
-                { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" }
-            ]
-            };
-        }
+        };
     }
 
     handleResponse(responseData: any) {
