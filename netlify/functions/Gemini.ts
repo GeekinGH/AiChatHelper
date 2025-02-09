@@ -8,7 +8,7 @@ export default class Gemini extends BaseModel {
 
     protected formatHeaders() {
         if (!this.headers) {
-            this.headers = {'Content-Type': 'application/json'};
+            this.headers = { 'Content-Type': 'application/json' };
         }
     }
 
@@ -47,20 +47,15 @@ export default class Gemini extends BaseModel {
 
         this.body = {
             'contents': this.messages,
-            "safetySettings": [{
-                    "category": "HARM_CATEGORY_HARASSMENT",
-                    "threshold": "BLOCK_NONE"
-                }, {
-                    "category": "HARM_CATEGORY_HATE_SPEECH",
-                    "threshold": "BLOCK_NONE"
-                }, {
-                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    "threshold": "BLOCK_NONE"
-                }, {
-                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                    "threshold": "BLOCK_NONE"
-                }
+            "safetySettings": [
+                { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" },
+                { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" },
+                { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" },
+                { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" }
             ],
+            "tools": [{  // 添加 tools 参数，增加谷歌搜索功能, 感谢 @SugarCarry 的贡献
+                "googleSearch": {}
+            }]
         };
     }
 
