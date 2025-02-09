@@ -67,7 +67,8 @@ export default class Gemini extends BaseModel {
                     // 添加 tools 参数，增加谷歌搜索功能, 感谢 @SugarCarry 的贡献
                     "google_search_retrieval": {
                         "dynamic_retrieval_config": {
-                            "mode": "MODE_DYNAMIC"
+                            "mode": "MODE_DYNAMIC",
+                            "dynamic_threshold": 0.3,
                         }
                     }
                 }
