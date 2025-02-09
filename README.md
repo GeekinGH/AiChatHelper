@@ -33,7 +33,7 @@
 |------------------|------------------------------|-------------------------------------------|
 | WXID_ARRAY       | 微信 ID 列表                  | wxid_abcdefg, lambous, yourxxx, abdcedf   |
 | APIKEY360        | 360 API Key，用于文生图功能    | your-360-api-key                          |
-| SUPPORTED_MODELS | 支持的模型配置，值为 JSON 字符串 | {"gpt-3.5-turbo": "ChatGPT", "gemini-pro": "Gemini"} |
+| SUPPORTED_MODELS | 支持的模型配置，值为 JSON 字符串 |  {“gemini-2.0-flash”: "Gemini"，”gemini-2.0-pro-exp”: "Gemini"} |
 
 WXID_ARRAY 的特别说明：
 - 替换为你需要授权的微信 ID，不同的 ID 需要用英文逗号隔开，最后一个微信 ID 后面不要加逗号。不需要加引号；  
@@ -46,6 +46,7 @@ WXID_ARRAY 的特别说明：
 10. 以后在 GitHub 修改你的代码，Netlify 会自动更新代码并重新部署。
 11. 第 7 步的环境变量是初次部署之前填写的。如果部署成功后再次修改环境变量的值，请重新部署。  
     <img src="./images/deploySite.png" width="400px"><img src="./images/configure-builds-retry-deploy-dropdown.png" width="400px">
+12. gemini-2.0-flash-exp, gemini-2.0-flash, gemini-2.0-pro-exp,这三个 Gemini 模型支持实时谷歌搜索功能，其中 gemini-2.0-flash, gemini-2.0-pro-exp模型在代码中没有写入，需要使用的请在环境变量中添加。【修改环境变量后需要重新部署才能生效】
 
 ## 使用方法
 
