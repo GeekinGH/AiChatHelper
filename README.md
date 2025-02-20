@@ -61,15 +61,19 @@ WXID_ARRAY 的特别说明：
 | ChatGPT plus   | gpt-4                       |
 | GPT-4o         | GPT-4o                      |
 | Gemini-pro     | Gemini-pro                  |
-| gemini-1.5-pro | gemini-1.5-pro-latest       |
-| gemini-1.5-flash | gemini-1.5-flash           |
-| gemini-2.0-flash | gemini-2.0-flash-exp       |
+| gemini-1.5 | gemini-1.5-pro-latest       |
+| gemini-1.5 | gemini-1.5-flash           |
+| gemini-2.0 | gemini-2.0-flash-exp       |
+| gemini-2.0 | gemini-2.0-flash       |
+| gemini-2.0 | gemini-2.0-pro-exp       |
 | 通义千问       | qwen-max                    |
 | Moonshot Kimi  | moonshot-v1-8k 或 moonshot-v1-32k |
 | Claude3        | claude-3-opus-20240229      |
 | 360智脑        | 360gpt-pro                  |
 | DeepSeek-V3    | deepseek-chat               |
 | DeepSeek-R1    | deepseek-reasoner           |
+| grok2   | grok-2-latest                  |
+| grok2    | grok-2               |
 
 3. 360AI 支持文生图功能，在聊天中，话术为：画xxxxxxxx，AI 则会返回一个图片链接。比如：画一个蓝天白云的图片。
 4. DeepSeek-R1 因为 WeChat 的字数限制，删除了推理过程，直接输出结果。DeepSeek 可以不用反代，直接输入 API 地址 https://api.deepseek.com
