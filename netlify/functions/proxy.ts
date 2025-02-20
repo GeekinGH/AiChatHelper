@@ -6,6 +6,7 @@ import Kimi from "./Kimi";
 import Claude3 from "./Claude3";
 import GPT360 from "./GPT360";
 import DeepSeek from "./DeepSeek";
+import Grok from "./Grok";
 
 // 从 Netlify 的环境变量中获取授权的微信ID
 const wxidArray = process.env.WXID_ARRAY ? process.env.WXID_ARRAY.split(',') : [];
@@ -26,6 +27,8 @@ const defaultSupportedModels = {
     'gemini-1.5-pro-latest': Gemini,
     'gemini-1.5-flash': Gemini,
     'gemini-2.0-flash-exp': Gemini,
+    'gemini-2.0-flash': Gemini,
+    'gemini-2.0-pro-exp': Gemini,
     'qwen-turbo': Qwen,
     'qwen-max': Qwen,
     'moonshot-v1-8k': Kimi,
@@ -33,7 +36,9 @@ const defaultSupportedModels = {
     'claude-3-opus-20240229': Claude3,
     '360gpt-pro': GPT360,
     'deepseek-chat': DeepSeek,
-    'deepseek-reasoner': DeepSeek
+    'deepseek-reasoner': DeepSeek,
+    'grok-2-latest': Grok,
+    'grok-2': Grok
 };
 
 // 合并默认支持的模型和环境变量中的支持模型，动态解析类名
